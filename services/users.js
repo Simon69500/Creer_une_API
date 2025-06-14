@@ -130,6 +130,7 @@ exports.authenticate = async (req, res, next) => {
     }
 }
 
+// Logout User
 exports.logout = async (req, res, next) => {
     return res.status(200).json({message: 'logout_succes'});
 }

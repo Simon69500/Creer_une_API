@@ -7,7 +7,7 @@ const private = require('../middleware/private');
 
 /* GET users listing. */
 
-// route pour l'authentification
+// route pour l'authentification + logout
 router.post('/login', service.authenticate);
 router.get('/logout', service.logout);
 

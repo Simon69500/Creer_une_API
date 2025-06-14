@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# Variables d'environnement
+.env
+.env.*
+
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Dossier de documentation générée
+out/
+docs/
+
+# Fichiers système
+.DS_Store
+Thumbs.db

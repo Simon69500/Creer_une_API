@@ -76,7 +76,7 @@ exports.delete = async (req, res, next) => {
     const id = req.params.id
 
     try {
-        await Catway.deleteOne({_id: id});
+        const result = await Catway.deleteOne({_id: id});
 
         if(result.deletedCount === 1){
             return res.status(204).json('Catway delete !');

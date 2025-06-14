@@ -1,0 +1,9 @@
+{
+    "source": {
+        "include": ["./routes", "./models", "./controllers"],
+        "includePattern": ".js$"
+    },
+    "ops": {
+        "destination": "./out"
+    }
+}

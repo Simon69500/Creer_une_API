@@ -83,7 +83,7 @@ exports.delete = async (req, res, next) => {
     const email = req.params.email
 
     try {
-        await User.deleteOne({email: email});
+       const result = await User.deleteOne({email: email});
 
         if(result.deletedCount === 1){
             return res.status(204).json('User delete !');

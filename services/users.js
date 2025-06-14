@@ -1,17 +1,26 @@
 const {default: mongoose} = require('mongoose');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const SECRET_KEY = process.env.SECRET_KEY;
+
+//Recuperer tous les User
+exports.getByAll = async (req, res, next) => {
+    try {
+        const user = await User.find({}, '-password -__v')
+        return res.status(200).json(user);
+    } catch(error){
+        return res.status(500).json(error);
+    }
+}
 
 // Recuperer un User
-exports.getById = async (req, res, next) => {
-    const id = req.params.id
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({ error:'invalid_user_id'});
-    }
+exports.getByMail = async (req, res, next) => {
+    const email = req.params.email
 
     try {
-        const user = await User.findById(id);
+        const user = await User.findByOne({email: email},'-password -__v');
 
         if(user) {
             return res.status(200).json(user);
@@ -26,7 +35,6 @@ exports.getById = async (req, res, next) => {
 exports.add = async (req, res, next) => {
     const temp = ({
         name: req.body.name,
-        firstname: req.body.firstname,
         email: req.body.email,
         password: req.body.password
     });
@@ -47,13 +55,12 @@ exports.update = async (req, res, next) => {
     const id = req.params.id
     const temp = ({
         name: req.body.name,
-        firstname: req.body.firstname,
         email: req.body.email,
         password: req.body.password
     });
 
     try {
-        let user = await User.findOne({id: id});
+        let user = await User.findOne({_id: id});
 
         if(user){
             Object.keys(temp).forEach((key) =>{
@@ -73,12 +80,12 @@ exports.update = async (req, res, next) => {
 
 //Suprimer un User
 exports.delete = async (req, res, next) => {
-    const id = req.params.id
+    const email = req.params.email
 
     try {
-        await User.deleteOne({id: id});
+        await User.deleteOne({email: email});
 
-        if(user){
+        if(result.deleteCount === 1){
             return res.status(204).json('User delete !');
         }
     } catch(error) {
@@ -101,7 +108,7 @@ exports.authenticate = async (req, res, next) => {
                 if(response){
                     delete user._doc.password;
 
-                    const expiresIn: 24 * 60 * 60;
+                    const expiresIn = 24 * 60 * 60;
                     const token = jwt.sign({
                         user: user
                     },
@@ -121,4 +128,9 @@ exports.authenticate = async (req, res, next) => {
     } catch(error) {
         return res.status(501).json(error);
     }
+}
+
+// Logout User
+exports.logout = async (req, res, next) => {
+    return res.status(200).json({message: 'logout_succes'});
 }

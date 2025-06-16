@@ -15,7 +15,7 @@ router.get('/logout', service.logout);
 router.get('/', private.checkJWT, service.getByAll)
 
 // La route pour lire les infos d'un utilisateur
-router.get('/:email', private.checkJWT, service.getByMail);
+router.get('/:email', service.getByMail);
 
 // La route pour ajouter un utilisateur
 router.post('/', service.add);

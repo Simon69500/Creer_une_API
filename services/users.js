@@ -20,7 +20,7 @@ exports.getByMail = async (req, res, next) => {
     const email = req.params.email
 
     try {
-        const user = await User.findByOne({email: email},'-password -__v');
+        const user = await User.findOne({email: email},'-password -__v');
 
         if(user) {
             return res.status(200).json(user);
@@ -33,19 +33,38 @@ exports.getByMail = async (req, res, next) => {
 
 // Ajout d'un user 
 exports.add = async (req, res, next) => {
-    const temp = ({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    });
+    console.log("Données du formulaire :", req.body);
 
     try {
-        let user = await User.create(temp)
+        const { name, email, password } = req.body;
+
+        if(!name || !email || !password) {
+            return res.status(400).json({error: 'missing_fields'})
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        let user = await User.create({
+            name,
+            email,
+            password: hashedPassword
+        })
 
         if(user) {
+            delete user._doc.password;
+            const expiresIn = 24 * 60 * 60;
+            const token = jwt.sign({
+                user: user
+            },
+        SECRET_KEY,
+            {
+                expiresIn: expiresIn
+            });
+
+            res.header('Authorization', 'Bearer ' + token);
             return res.status(201).json(user);
         }
     } catch(error) {
+        console.log("Erreur création user ! :", error);
         return res.status(501).json(error);
     }
 }
@@ -71,6 +90,10 @@ exports.update = async (req, res, next) => {
             await user.save();
             return res.status(201).json(user);
         }
+        if (temp.password) {
+                temp.password = await bcrypt.hash(temp.password, 10);
+}
+
 
         return res.status(404).json('user_not_found');
     } catch(error) {
@@ -96,39 +119,38 @@ exports.delete = async (req, res, next) => {
 
 // Authentification de User
 exports.authenticate = async (req, res, next) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({email: email}, '-__v -createdAt -updatedAt');
-        if(user){
-            bcrypt.compare(password, user.password, function(err, response){
-                if(err){
-                    throw new Error(err)
-                }
-                if(response){
-                    delete user._doc.password;
-
-                    const expiresIn = 24 * 60 * 60;
-                    const token = jwt.sign({
-                        user: user
-                    },
-                SECRET_KEY,
-                {
-                    expiresIn: expiresIn
-                });
-
-                res.headers('Authorization', 'Bearer' + token);
-                }
-
-                return res.status(403).json('wrong_credentials');
-            });
-        } else {
-            return res.status(404).json('user_not_found');
+        let user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json('user_not_found_authenticate');
         }
-    } catch(error) {
+
+        console.log("Hash en base:", user.password);
+        console.log("Password fourni:", password);
+
+        const passwordMatch = bcrypt.compare(password, user.password);
+        console.log("Résultat comparaison:", passwordMatch);
+
+        if (!passwordMatch) {
+            return res.status(403).json('wrong_credentials');
+        }
+
+        delete user._doc.password;
+
+        const expiresIn = 24 * 60 * 60;
+        const token = jwt.sign({ user }, SECRET_KEY, { expiresIn });
+
+        res.header('Authorization', 'Bearer ' + token);
+        return res.status(200).json({ user, token });
+
+    } catch (error) {
         return res.status(501).json(error);
     }
-}
+};
+
+
 
 // Logout User
 exports.logout = async (req, res, next) => {

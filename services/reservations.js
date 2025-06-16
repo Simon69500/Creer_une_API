@@ -51,7 +51,7 @@ exports.add = async (req, res, next) => {
 //Modifer une Reservation
 exports.update = async (req, res, next) => {
     const catwayNumber = req.params.id;
-    const reservationId = req.params._id;
+    const reservationId = req.params._idta;
 
     const temp = ({
         catwayNumber: req.body.catwayNumber,

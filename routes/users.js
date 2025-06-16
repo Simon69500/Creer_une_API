@@ -13,11 +13,13 @@ router.get('/logout', service.logout);
 
 // La route pour lire les infos des utilisateur
 router.get('/', private.checkJWT, service.getByAll)
+
 // La route pour lire les infos d'un utilisateur
 router.get('/:email', private.checkJWT, service.getByMail);
 
 // La route pour ajouter un utilisateur
-router.post('/',private.checkJWT, service.add);
+router.post('/', service.add);
+
 
 // La route pour modifier un utilisateur
 router.put('/:email', private.checkJWT, service.update);

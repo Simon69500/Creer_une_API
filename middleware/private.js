@@ -22,7 +22,7 @@ exports.checkJWT = async (req, res, next) => {
                 expiresIn: expiresIn
             });
 
-            res.headers('Authorization', 'Bearer', newToken);
+            res.headers('Authorization', 'Bearer ' + newToken);
             next()
             }
         });

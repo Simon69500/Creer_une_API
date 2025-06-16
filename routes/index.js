@@ -12,6 +12,14 @@ router.get('/dashboard',private.checkJWT, (req, res) => {
   res.render('dashboard');
 });
 
+router.get('/reservations',private.checkJWT, (req, res) => {
+  res.render('reservations');
+});
+
+router.get('/catways',private.checkJWT, (req, res) => {
+  res.render('catways');
+});
+
 module.exports = router;
 
 

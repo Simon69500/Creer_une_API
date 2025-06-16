@@ -1,98 +1,97 @@
-async function userConnect() {
+// Partie Reservations
 
-    try {
-        let res = await fetch('/me', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {'Accept': 'application/json', }
-        });
+const catwayId = 1;  // Remplace par le catway courant
 
-        if (!res.ok) {
-            throw new Error("Erreur API : " + res.status);
-        }
+document.getElementById('catwayId').textContent = catwayId;
 
-        let user = await res.json();
-        console.log("Utilisateur :", user);
+const reservationsList = document.getElementById('reservationsList');
+const form = document.getElementById('reservationForm');
+const reservationIdInput = document.getElementById('reservationId');
 
-        let userDom = document.querySelector(".user");
-        let title = document.createElement("h3");
-        title.textContent = `${user.name} ${user.email}`;
-        userDom.appendChild(title);
+async function fetchReservations() {
+  const res = await fetch(`/catways/${catwayId}/reservations`, { credentials: 'include' });
+  if (!res.ok) return alert('Erreur chargement réservations');
+  const reservations = await res.json();
 
-    } catch (e) {
-        console.error("Erreur de récupération :", e);
-    }
+  reservationsList.innerHTML = '';
+  reservations.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.clientName} - ${r.boatName} du ${new Date(r.startDate).toLocaleDateString()} au ${new Date(r.endDate).toLocaleDateString()}`;
+    
+    // Boutons Modifier et Supprimer
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Modifier';
+    editBtn.onclick = () => fillFormForEdit(r);
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Supprimer';
+    deleteBtn.onclick = () => deleteReservation(r._id);
+    
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
+    reservationsList.appendChild(li);
+  });
 }
 
-userConnect();
-
-function date () {
-    let dateDiv = document.querySelector('.date');
-    let time = document.createElement('h3')
-    let today = new Date();
-    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let formattedDate = today.toLocaleDateString('fr-FR', options);
-    time.textContent= formattedDate;
-    dateDiv.appendChild(time);
+function fillFormForEdit(reservation) {
+  reservationIdInput.value = reservation._id;
+  form.clientName.value = reservation.clientName;
+  form.boatName.value = reservation.boatName;
+  form.startDate.value = reservation.startDate.slice(0,10);  // yyyy-mm-dd
+  form.endDate.value = reservation.endDate.slice(0,10);
 }
 
-date();
+form.onsubmit = async (e) => {
+  e.preventDefault();
 
-async function reservationUser() {
-    try {
+  const body = {
+    catwayNumber: catwayId,
+    clientName: form.clientName.value,
+    boatName: form.boatName.value,
+    startDate: form.startDate.value,
+    endDate: form.endDate.value
+  };
 
-        let res = await fetch(`/catways/${id}/reservations`, {
-          headers: { 'Accept': 'application/json' }
-        });
+  let url = `/catways/${catwayId}/reservations`;
+  let method = 'POST';
 
-        if (!res.ok) throw new Error('Erreur API : ' + res.status);
+  if (reservationIdInput.value) {
+    url += `/${reservationIdInput.value}`;
+    method = 'PUT';
+  }
 
-        let reservations = await res.json();
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(body)
+  });
 
-        let tableDiv = document.querySelector('.table');
-        let list = document.createElement("ul");
+  if (res.ok) {
+    alert('Réservation enregistrée');
+    form.reset();
+    reservationIdInput.value = '';
+    fetchReservations();
+  } else {
+    alert('Erreur lors de la sauvegarde');
+  }
+};
 
-        reservations.forEach(r => {
-            
-            const start = new Date(r.startDate);
-            const end = new Date(r.endDate);
-
-           
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const startFormatted = start.toLocaleDateString('fr-FR', options);
-            const endFormatted = end.toLocaleDateString('fr-FR', options);
-
-            let item = document.createElement("li");
-            item.textContent = `${r.clientName} - ${r.boatName} du ${startFormatted} au ${endFormatted}`;
-            list.appendChild(item);
-        });
-
-        tableDiv.appendChild(list);
-
-    } catch (e) {
-        console.error(e);
-    }
+async function deleteReservation(id) {
+  if (!confirm('Confirmer suppression ?')) return;
+  const res = await fetch(`/catways/${catwayId}/reservations/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+  if (res.ok) {
+    alert('Réservation supprimée');
+    fetchReservations();
+  } else {
+    alert('Erreur suppression');
+  }
 }
 
-reservationUser();
+document.getElementById('loadReservationsBtn').onclick = fetchReservations;
 
-
-function logout() {
-
-    document.getElementById('logoutBtn').addEventListener('click', async ( ) => {
-        try {
-            const res = await fetch('/users/logout', {
-            method: 'POST',
-            credentials: 'include', 
-        });
-        if (res.ok) {
-        window.location.href = '/'; // redirection vers l'accueil après déconnexion
-      } else {
-        console.error('Erreur lors de la déconnexion');
-      }
-    } catch (e) {
-      console.error('Erreur réseau', e);
-    }
-    });
-}
-logout();
+// Charger les réservations au chargement
+fetchReservations();

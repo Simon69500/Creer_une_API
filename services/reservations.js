@@ -24,7 +24,7 @@ exports.getById = async (req, res, next) => {
         }
         return res.status(404).json('reservation_not_found');
     }catch(error){
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -45,18 +45,19 @@ exports.add = async (req, res, next) => {
             return res.status(201).json(reservation);
         }
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
 //Modifer une Reservation
 exports.update = async (req, res, next) => {
     const catwayNumber = req.params.id;
-    const reservationId = req.params._idReservation;
+    const reservationId = req.params.idReservation;
 
     const temp = ({
         catwayNumber: req.body.catwayNumber,
         clientName: req.body.clientName,
+        clientEmail: req.email,
         boatName: req.body.boatName,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
@@ -77,7 +78,7 @@ exports.update = async (req, res, next) => {
 
         return res.status(404).json('reservation_not_found');
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -95,6 +96,6 @@ exports.delete = async (req, res, next) => {
             return res.status(404).json('reservation_not_found')
         }
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }

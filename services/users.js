@@ -127,8 +127,7 @@ exports.authenticate = async (req, res, next) => {
       maxAge: expiresIn * 1000
     });
 
-    res.setHeader('Authorization', 'Bearer ' + token);
-    return res.status(200).json({ user, token });
+    res.render('dashboard', { user });
 
   } catch (error) {
     console.error('Erreur dans authenticate:', error);
@@ -139,5 +138,12 @@ exports.authenticate = async (req, res, next) => {
 
 // Logout User
 exports.logout = async (req, res, next) => {
+    
+  res.clearCookie('access_token', {
+    httpOnly: true,
+    sameSite: 'Strict',
+    path: '/'
+  });
+
     return res.status(200).json({message: 'logout_succes'});
 }

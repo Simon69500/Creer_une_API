@@ -14,12 +14,13 @@ exports.getByAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
     const catwayNumber = req.params.id;
     const reservationId = req.params.idReservation;
+    const userEmail = req.mail;
 
     try {
-        const reservation = await Reservation.findOne({ _id: reservationId, catwayNumber: catwayNumber});
+        const reservation = await Reservation.findOne({ _id: reservationId, catwayNumber: catwayNumber, clientEmail: userEmail});
 
         if(reservation) {
-            return res.status(200).json(reservation);
+            return res.status(200).json({message: 'Vos Réservations : ',reservation});
         }
         return res.status(404).json('reservation_not_found');
     }catch(error){
@@ -51,7 +52,7 @@ exports.add = async (req, res, next) => {
 //Modifer une Reservation
 exports.update = async (req, res, next) => {
     const catwayNumber = req.params.id;
-    const reservationId = req.params._idta;
+    const reservationId = req.params._idReservation;
 
     const temp = ({
         catwayNumber: req.body.catwayNumber,

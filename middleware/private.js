@@ -20,10 +20,10 @@ exports.checkJWT = async (req, res, next) => {
       return res.status(401).json('token_not_valid');
     }
 
-    req.decoded = decoded;
+    req.email = decoded.email;
 
     const expiresIn = 24 * 60 * 60;
-    const newToken = jwt.sign({ user: decoded.user }, SECRET_KEY, { expiresIn });
+    const newToken = jwt.sign({ email: decoded.email }, SECRET_KEY, { expiresIn });
 
 
     res.cookie('access_token', newToken, {

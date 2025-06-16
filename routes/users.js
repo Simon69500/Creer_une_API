@@ -9,13 +9,13 @@ const private = require('../middleware/private');
 
 // route pour l'authentification + logout
 router.post('/login', service.authenticate);
-router.get('/logout', service.logout);
+router.post('/logout', service.logout);
 
 // La route pour lire les infos des utilisateur
 router.get('/', private.checkJWT, service.getByAll)
 
 // La route pour lire les infos d'un utilisateur
-router.get('/:email', service.getByMail);
+router.get('/:email',private.checkJWT, service.getByMail);
 
 // La route pour ajouter un utilisateur
 router.post('/', service.add);

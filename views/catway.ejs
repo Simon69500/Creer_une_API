@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <title>API - Catways</title>
+</head>
+<body>
+      <header>
+    <a href="/">Accueil</a>
+    <a href="/dashboard">Tableau de Bord</a>
+    <a href="/docs">Documentation</a>
+    <button id="logoutBtn">Se déconnecter</button>
+  </header>
+    <main>
+      <h1>Catways Page</h1>
+        <h2> Catway n° <span id="catwayIdDisplay"></span></h2>
+
+        <div class="formDiv">
+        <form id="catwayForm">
+          <fieldset  class="card">
+            <legend>Créer / Modifier un catways</legend>
+            <input type="hidden" id="catwayIdInput" />
+
+            <label for="catwayNumber">Numéro catway</label>
+            <input type="number" id="catwayNumber" required />
+
+            <label for="catwayType">Type catway</label>
+            <input type="text" id="catwayType" placeholder="Type catway" required />
+
+            <label for="catwayState">État catway</label>
+            <input type="text" id="catwayState" placeholder="État (…)" required />
+
+            <button type="submit" class="btnForm">Créer</button>
+            <button type="button" class="btnModifForm">Modifier uniquement l'état</button>
+
+          </fieldset>
+        </form>
+        </div> 
+        <br>
+        <div class="listDiv">
+          <h3>Liste des Catways</h3>
+          <ul id="catwaysList"></ul>
+        </div> 
+
+    </main>
+    <script src="/javascripts/catways.js"></script>
+</body>
+</html>

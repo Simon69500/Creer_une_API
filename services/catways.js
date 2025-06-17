@@ -22,7 +22,7 @@ exports.getById = async (req, res, next) => {
         }
         return res.status(404).json('catway_not_found');
     }catch(error){
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -35,25 +35,32 @@ exports.add = async (req, res, next) => {
     });
 
     try {
+        const exists = await Catway.findOne({ catwayNumber: temp.catwayNumber });
+
+        if (exists) {
+            return res.status(409).json({ error: 'catwayNumber déjà existant' });
+        }
+
         let catway = await Catway.create(temp)
 
         if(catway) {
             return res.status(201).json(catway);
         }
+
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
 //Modifer un Catway
 exports.update = async (req, res, next) => {
-    const id = req.params.id
+    const id = req.params.id;
     const temp = ({
         catwayState: req.body.catwayState
     });
 
     try {
-        let catway = await Catway.findOne({catwayNumber: id});
+        let catway = await Catway.findById(id);
 
         if(catway){
             Object.keys(temp).forEach((key) =>{
@@ -67,7 +74,7 @@ exports.update = async (req, res, next) => {
 
         return res.status(404).json('catway_not_found');
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -84,6 +91,6 @@ exports.delete = async (req, res, next) => {
             return res.status(404).json('catway_not_found')
         }
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }

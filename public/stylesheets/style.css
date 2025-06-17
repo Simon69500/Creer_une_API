@@ -32,3 +32,11 @@ a {
   color: #00B7FF;
 }
 
+button {
+  border-radius: 10px;
+  border: 1 black;
+  color: white;
+  background-color: grey;
+  padding: 2px;
+}
+

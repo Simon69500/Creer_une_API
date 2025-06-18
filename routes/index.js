@@ -3,6 +3,7 @@ var router = express.Router();
 const private = require('../middleware/private');
 const User = require('../models/users');
 const Catway = require('../models/catway');
+const Reservation = require('../models/reservations');
 
 
 /* --- ROUTES HTML --- */
@@ -15,9 +16,15 @@ router.get('/dashboard', private.checkJWT, (req, res) => {
   res.render('dashboard');
 });
 
-router.get('/reservations', private.checkJWT, (req, res) => {
-  res.render('reservations');
+router.get('/reservations', private.checkJWT, async (req, res, next) => {
+  try {
+    const reservations = await Reservation.find({});
+    res.render('reservation', { reservations, catwayId: req.params.id || null });
+  } catch (error) {
+    next(error);
+  }
 });
+
 
 router.get('/catways', private.checkJWT, async (req, res, next) => {
   try {
@@ -31,6 +38,7 @@ router.get('/catways', private.checkJWT, async (req, res, next) => {
 router.get('/user', private.checkJWT, (req, res) => {
   res.render('user');
 });
+
 
 /* --- ROUTE API --- */
 

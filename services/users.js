@@ -8,7 +8,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 exports.getByAll = async (req, res, next) => {
     try {
         const users = await User.find({}, )
-        return res.status(200).json(users);
+        return res.render('users', { users });
     } catch(error){
         return res.status(500).json(error);
     }
@@ -22,7 +22,7 @@ exports.getByMail = async (req, res, next) => {
         const user = await User.findOne({email: email},);
 
         if(user) {
-            return res.status(200).json(user);
+            return res.render('user-edit', { user });
         }
         return res.status(404).json('user_not_found');
     }catch(error){
@@ -32,7 +32,6 @@ exports.getByMail = async (req, res, next) => {
 
 // Ajout d'un user 
 exports.add = async (req, res, next) => {
-  console.log("Données du formulaire :", req.body);
 
   try {
     const { name, email, password } = req.body;
@@ -43,7 +42,7 @@ exports.add = async (req, res, next) => {
 
     const user = await User.create({ name, email, password });
     delete user._doc.password;
-    return res.status(201).json({user});
+    return res.redirect('/?created=true');
 
   } catch (error) {
     console.error("Erreur création user :", error);
@@ -55,31 +54,38 @@ exports.add = async (req, res, next) => {
 
 //Modifer un user
 exports.update = async (req, res, next) => {
-    const email = req.params.email
-    const temp = ({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    });
+    const oldEmail = req.body.oldEmail;  
+    const { name, email: newEmail, password } = req.body;
 
     try {
-        let user = await User.findOne({email: email});
+        let user = await User.findOne({ email: oldEmail });  
 
-        if(user){
-            Object.keys(temp).forEach((key) =>{
-                if(!!temp[key]){
-                    user[key] = temp[key];
-                }
-            });
-            await user.save();
-            return res.status(201).json(user);
+        if(!user){
+            return res.status(404).json('user_not_found');
         }
 
-        return res.status(404).json('user_not_found');
+        if (newEmail && newEmail !== oldEmail) {
+            const existingUser = await User.findOne({ email: newEmail });
+            if (existingUser) {
+                return res.status(409).json({ error: 'email_already_in_use' });
+            }
+            user.email = newEmail;
+        }
+
+        user.name = name || user.name;
+
+        if (password && password.trim() !== "") {
+            user.password = await bcrypt.hash(password, 10);
+        }
+
+        await user.save();
+        return res.redirect('/users');
+
     } catch(error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
+
 
 //Suprimer un User
 exports.delete = async (req, res, next) => {
@@ -88,10 +94,11 @@ exports.delete = async (req, res, next) => {
     try {
        const result = await User.deleteOne({email: email});
 
-        if(result.deletedCount === 1){
-            return res.status(204).json('User delete !');
-        }
-    } catch(error) {
+    if (result.deletedCount === 1) {
+      return res.redirect('/users');
+    } else {
+      return res.status(404).json({ message: 'user_not_found' });
+    }} catch(error) {
         return res.status(501).json(error);
     }
 }
@@ -127,7 +134,7 @@ exports.authenticate = async (req, res, next) => {
       maxAge: expiresIn * 1000
     });
 
-    res.render('dashboard', { user });
+    return res.redirect('/dashboard');
 
   } catch (error) {
     console.error('Erreur dans authenticate:', error);

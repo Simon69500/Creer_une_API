@@ -30,6 +30,7 @@ app.use(cors({
   origin: '*'
 }));
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,7 +40,7 @@ app.use(methodOverride('_method'));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catways', catwaysRouter);
-app.use('/catways', reservationRouter);
+app.use('/', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

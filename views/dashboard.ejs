@@ -3,21 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tableau de bord</title>
 </head>
 <body>
       <header>
-    <a href="/">Accueil</a>
-    <a href="/dashboard">Tableau de Bord</a>
-    <a href="/docs">Documentation</a>
-    <button id="logoutBtn">Se déconnecter</button>
-  </header>
+        <a href="/">Accueil</a>
+        <a href="/out">Documentation</a>
+        <button id="logoutBtn">Se déconnecter</button>
+      </header>
+
     <main>
-          <h1>Mes informations</h1>
-          <div id="user"></div>
-          <div id="date"></div>
-          <div id="table"></div>
+        <h1>Bienvenue <%= user.name %></h1>
+      <p>Email : <%= user.email %></p>
+      <p>Date : <%= new Date().toLocaleDateString('fr-FR') %></p>
+
+      <h2>Réservations en cours</h2>
+    <% if (reservations && reservations.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Emplacement</th>
+            <th>Date</th>
+            <th>Durée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reservations.forEach(r => { %>
+            <tr>
+              <td><%= r.name %></td>
+              <td><%= r.catway %></td>
+              <td><%= new Date(r.date).toLocaleDateString('fr-FR') %></td>
+              <td><%= r.duration %> jours</td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>Aucune réservation en cours.</p>
+    <% } %>
     </main>
-    <script src="/javascripts/dashboard.js"></script>
+    <script src="/javascripts/app.js"></script>
 </body>
 </html>

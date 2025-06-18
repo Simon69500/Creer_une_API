@@ -1,65 +1,80 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <title>API pour le Port de Plaisance Russell</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>API pour le Port de Plaisance Russell</title>
+  </head>
+  <body>
     <header>
-<a href="/">Accueil</a>
-<a href="/users">utilisateurs</a>
-<a href="/catways">Catways</a>
-<a href="/reservations">Réservation</a>
-<a href="/dashboard">Tableau de Bord</a>
-  </header>
+      <h1>API pour le Port de Plaisance Russell</h1>
+    </header>
 
-  <main>
-  <h1>API pour le Port de Plaisance Russell</h1>
-<article class="card">
-  <h2>Présentation de l'application</h2>
-  <p>
-    Le port de plaisance de Russell s’est récemment doté d’une application web dédiée à la gestion des réservations de catways (petits appontements destinés à l’amarrage des bateaux).
-    La capitainerie a mis en œuvre une API privée, offrant aux utilisateurs un outil fiable et sécurisé pour gérer efficacement leurs réservations.
-    Nous vous invitons à vous connecter ou à créer un compte afin de bénéficier pleinement des fonctionnalités proposées.
-    Une fois authentifié, vous serez redirigé vers un tableau de bord centralisé vous permettant de gérer vos catways et vos réservations en toute autonomie.
-  </p>
-</article>
+    <main>
+      <article class="card">
+        <h2>Présentation de l'application</h2>
+        <p>
+          Le port de plaisance de Russell a récemment lancé une application web
+          dédiée à la gestion des réservations de catways, ces petits
+          appontements pour amarrer les bateaux. <br /><br />
+          La capitainerie a développé une API privée offrant aux utilisateurs un
+          outil sécurisé et performant pour gérer leurs réservations facilement.
+          <br /><br />
+          Pour profiter pleinement des fonctionnalités,
+          <strong>merci de vous enregistrer puis de vous connecter</strong>.
+          <br /><br />
+          Après authentification, vous serez dirigé vers un tableau de bord
+          personnalisé où vous pourrez gérer vos catways et réservations en
+          toute autonomie.
+        </p>
+      </article>
 
-  <form action="http://localhost:3000/users/login" method="post">
-    <fieldset class="card">
-        <legend>Se connecter</legend>
-        <label for="email">Email : </label>
-        <input type="text" id="email" name="email">
-        <br>
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" id="password">
-        <br>
-        <input type="submit" name="connect" id="submit" value="Se Connecter">
-    </fieldset>
-  </form>
+      <form action="http://localhost:3000/users/login" method="post">
+        <fieldset class="cardForm">
+          <legend>Se connecter</legend>
+          <label for="email">Email : </label>
+          <input type="text" id="email" name="email" />
+          <br />
+          <label for="password">Mot de passe :</label>
+          <input type="password" name="password" id="password" />
+          <br />
+          <input
+            type="submit"
+            name="connect"
+            id="submit"
+            value="Se Connecter"
+          />
+        </fieldset>
+      </form>
 
-  <form action="http://localhost:3000/users/" method="post">
-    <fieldset class="card">
-      <legend>S'enregistrer</legend>
-      <label for="register-name">Nom :</label>
-      <input type="text" id="register-name" name="name" required>
-      <br>
-      <label for="register-email">Email :</label>
-      <input type="text" id="register-email" name="email" required>
-      <br>
-      <label for="register-password">Mot de passe :</label>
-      <input type="password" name="password" id="register-password" required>
-      <br>
-      <input type="submit" name="enregistrer" >
-    </fieldset>
-  </form>
-
-  <br>
-  </main>
-  <footer>
-  <a href="/out" target="_blank">Voir la documentation de l'API</a>
-  </footer>
-  <script src="/javascripts/app.js"></script>
-</body>
+      <form action="http://localhost:3000/users/" method="post">
+        <fieldset class="cardForm">
+          <legend>S'enregistrer</legend>
+          <label for="register-name">Nom :</label>
+          <input type="text" id="register-name" name="name" required />
+          <br />
+          <label for="register-email">Email :</label>
+          <input type="text" id="register-email" name="email" required />
+          <br />
+          <label for="register-password">Mot de passe :</label>
+          <input
+            type="password"
+            name="password"
+            id="register-password"
+            required
+          />
+          <br />
+          <input type="submit" name="enregistrer" />
+        </fieldset>
+      </form>
+      <br />
+      <a href="/out" target="_blank">Voir la documentation de l'API</a>
+    </main>
+    <footer>
+      <a class="menu" href="/">Accueil</a>
+      <a class="menu" href="/catways">Catways</a>
+      <a class="menu" href="/reservations">Réservations</a>
+      <a class="menu" href="/users">Utilisateurs</a>
+    </footer>
+  </body>
 </html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Détail du Catway</title>
+</head>
+<body>
+<h1>Détail de la réservation n°<%= reservation.catwayNumber %></h1>
+    <p>Nom du client : <%= reservation.clientName %></p>
+    <p>Nom du bateau : <%= reservation.boatName %></p>
+    <p>Date début : <%= reservation.startDateFormatted %></p>
+    <p>Date fin : <%= reservation.endDateFormatted %></p>
+
+    <a href="/reservations">Retour à la liste</a>
+</body>
+</html>

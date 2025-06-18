@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/table.css">
+  <title>Liste des Réservations</title>
+</head>
+<body>
+
+<div class="tableDiv">
+  <h2>Liste des réservations</h2>
+
+  <% if (reservations && reservations.length > 0) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Catway</th>
+        <th>Client</th>
+        <th>Bateau</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% reservations.forEach(reservation => { %>
+      <tr>
+        <td><a href="/catways/<%= reservation.catwayNumber %>/reservations/<%= reservation._id %>"><%= reservation.catwayNumber %></a></td>
+        <td><%= reservation.clientName %></td>
+        <td><%= reservation.boatName %></td>
+        <td><%= reservation.startDate.toLocaleDateString() %></td>
+        <td><%= reservation.endDate.toLocaleDateString() %></td>
+        <td>
+          <form method="POST" action="/catways/<%= reservation.catwayNumber %>/reservations/<%= reservation._id %>?_method=DELETE" style="display:inline;">
+            <button type="submit" onclick="return confirm('Confirmer la suppression ?')">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p>Aucune réservation trouvée.</p>
+  <% } %>
+</div>
+
+<div class="formDiv">
+  <h2>Ajouter une nouvelle Réservation</h2>
+  <form method="POST" action="/catways/<%= catwayId || 1 %>/reservations">
+    <label for="catwayNumber">Numéro Catway :</label>
+    <input type="number" id="catwayNumber" name="catwayNumber" required><br>
+
+    <label for="clientName">Nom du Client :</label>
+    <input type="text" id="clientName" name="clientName" required><br>
+
+    <label for="boatName">Nom du Bateau :</label>
+    <input type="text" id="boatName" name="boatName" required><br>
+
+    <label for="startDate">Date de Début :</label>
+    <input type="date" id="startDate" name="startDate" required><br>
+
+    <label for="endDate">Date de Fin :</label>
+    <input type="date" id="endDate" name="endDate" required><br>
+
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
+
+</body>
+</html>

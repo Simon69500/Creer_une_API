@@ -3,8 +3,8 @@ const Reservation = require('../models/reservations');
 //Recuperer tous la liste des Reservations
 exports.getByAll = async (req, res, next) => {
     try {
-        const reservation = await Reservation.find({})
-        return res.status(200).json(reservation);
+        const reservations = await Reservation.find({ catwayNumber: req.params.id });
+        res.render('reservations', { reservations });
     } catch(error){
         return res.status(500).json(error);
     }
@@ -12,19 +12,21 @@ exports.getByAll = async (req, res, next) => {
 
 // Recuperer une Reservation
 exports.getById = async (req, res, next) => {
-    const catwayNumber = req.params.id;
-    const reservationId = req.params.idReservation;
-    const userEmail = req.mail;
+    const id = Number(req.params.id);
 
     try {
-        const reservation = await Reservation.findOne({ _id: reservationId, catwayNumber: catwayNumber, clientEmail: userEmail});
+        const reservation = await Reservation.findOne({ catwayNumber: id });
 
-        if(reservation) {
-            return res.status(200).json({message: 'Vos Réservations : ',reservation});
+        if (!reservation) {
+            return res.status(404).send('Réservation introuvable');
         }
-        return res.status(404).json('reservation_not_found');
-    }catch(error){
-        return res.status(500).json(error);
+        
+        reservation.startDateFormatted = reservation.startDate.toLocaleDateString('fr-FR');
+        reservation.endDateFormatted = reservation.endDate.toLocaleDateString('fr-FR');
+        return res.render('reservation-detail', { reservation });
+        
+    } catch (error) {
+        return res.status(500).send("Erreur serveur : " + error.message);
     }
 }
 
@@ -42,7 +44,7 @@ exports.add = async (req, res, next) => {
         let reservation = await Reservation.create(temp)
 
         if(reservation) {
-            return res.status(201).json(reservation);
+            res.redirect(`/catways/${temp.catwayNumber}/reservations`);
         }
     } catch(error) {
         return res.status(500).json(error);
@@ -73,7 +75,7 @@ exports.update = async (req, res, next) => {
                 }
             });
             await reservation.save();
-            return res.status(200).json(reservation);
+            res.redirect(`/catways/${catwayNumber}/reservations`);
         }
 
         return res.status(404).json('reservation_not_found');
@@ -91,7 +93,7 @@ exports.delete = async (req, res, next) => {
        const result = await Reservation.deleteOne({_id: reservationId, catwayNumber: catwayNumber});
 
         if(result.deletedCount === 1){
-            return res.status(204).json('reservation delete !');
+            res.redirect(`/catways/${catwayNumber}/reservations`);
         } else {
             return res.status(404).json('reservation_not_found')
         }

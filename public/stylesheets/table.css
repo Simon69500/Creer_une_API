@@ -1,0 +1,44 @@
+.tableDiv table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+.tableDiv th, .tableDiv td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.tableDiv th {
+  background-color: #453bd1;
+}
+
+.tableDiv a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.tableDiv a:hover {
+  text-decoration: underline;
+}
+
+.tableDiv button {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.tableDiv button:hover {
+  background-color: #0056b3;
+}
+
+.tableDiv input[type="text"] {
+  width: 100px;
+  padding: 4px 6px;
+  margin-right: 5px;
+}

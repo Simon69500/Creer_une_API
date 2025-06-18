@@ -2,32 +2,38 @@ var express = require('express');
 var router = express.Router();
 const private = require('../middleware/private');
 const User = require('../models/users');
+const Catway = require('../models/catway');
 
-/* GET home page. */
+
+/* --- ROUTES HTML --- */
+
 router.get('/', function(req, res, next) {
-  res.render('index',);
+  res.render('index');
 });
 
-router.get('/dashboard',private.checkJWT, (req, res) => {
+router.get('/dashboard', private.checkJWT, (req, res) => {
   res.render('dashboard');
 });
 
-router.get('/reservations',private.checkJWT, (req, res) => {
+router.get('/reservations', private.checkJWT, (req, res) => {
   res.render('reservations');
 });
 
-router.get('/catway',private.checkJWT, (req, res) => {
-  res.render('catway');
+router.get('/catways', private.checkJWT, async (req, res, next) => {
+  try {
+    const catways = await Catway.find({});
+    res.render('catway', { catways });
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/user',private.checkJWT, (req, res) => {
+router.get('/user', private.checkJWT, (req, res) => {
   res.render('user');
 });
 
-module.exports = router;
+/* --- ROUTE API --- */
 
-
-/* Get API */
 router.get('/me', private.checkJWT, async (req, res) => {
   try {
     console.log("Email récupéré du token :", req.email);
@@ -43,9 +49,10 @@ router.get('/me', private.checkJWT, async (req, res) => {
     }
 
     res.json(user);
-
   } catch (err) {
     console.error('Erreur dans /me :', err);
     res.status(500).json({ error: err.message });
   }
 });
+
+module.exports = router;

@@ -1,49 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <title>API - Catways</title>
+  <link rel="stylesheet" href="/stylesheets/table.css">
+
+  <title>Liste des Catways</title>
 </head>
 <body>
-      <header>
-    <a href="/">Accueil</a>
-    <a href="/dashboard">Tableau de Bord</a>
-    <a href="/docs">Documentation</a>
-    <button id="logoutBtn">Se déconnecter</button>
-  </header>
-    <main>
-      <h1>Catways Page</h1>
-        <h2> Catway n° <span id="catwayIdDisplay"></span></h2>
 
-        <div class="formDiv">
-        <form id="catwayForm">
-          <fieldset  class="card">
-            <legend>Créer / Modifier un catways</legend>
-            <input type="hidden" id="catwayIdInput" />
+<div class="tableDiv">
+  <h2>Liste des Catways</h2>
 
-            <label for="catwayNumber">Numéro catway</label>
-            <input type="number" id="catwayNumber" required />
+  <% if (catways && catways.length > 0) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Type</th>
+        <th>État</th>
+        <th>Modifier l'état</th>
+        <th>Supprimer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% catways.forEach(catway => { %>
+      <tr>
+        <td><a href="/catways/<%= catway.catwayNumber %>"><%= catway.catwayNumber %></a></td>
+        <td><%= catway.catwayType %></td>
+        <td><%= catway.catwayState %></td>
+        <td>
+          <form method="POST" action="/catways/<%= catway._id %>/update" style="margin:0;">
+            <input type="text" name="catwayState" value="<%= catway.catwayState %>" required>
+            <button type="submit">Modifier</button>
+          </form>
+        </td>
+        <td>
+          <form method="POST" action="/catways/<%= catway._id %>/delete" style="margin:0;">
+            <button type="submit" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p>Aucun catway trouvé.</p>
+  <% } %>
+</div>
 
-            <label for="catwayType">Type catway</label>
-            <input type="text" id="catwayType" placeholder="Type catway" required />
 
-            <label for="catwayState">État catway</label>
-            <input type="text" id="catwayState" placeholder="État (…)" required />
+  <div class="formDiv">
+    <h2>Ajouter un nouveau Catway</h2>
+      <form method="POST" action="/catways">
+        <label for="catwayNumber">Numéro :</label>
+        <input type="number" id="catwayNumber" name="catwayNumber" required><br>
 
-            <button type="submit" class="btnForm">Créer</button>
-            <button type="button" class="btnModifForm">Modifier uniquement l'état</button>
+        <label for="catwayType">Type :</label>
+        <select id="catwayType" name="catwayType" required>
+          <option value="short">Short</option>
+          <option value="long">Long</option>
+        </select><br>
 
-          </fieldset>
-        </form>
-        </div> 
-        <br>
-        <div class="listDiv">
-          <h3>Liste des Catways</h3>
-          <ul id="catwaysList"></ul>
-        </div> 
+        <label for="catwayState">État :</label>
+        <input type="text" id="catwayState" name="catwayState" required><br>
 
-    </main>
-    <script src="/javascripts/catways.js"></script>
+        <button type="submit">Ajouter</button>
+      </form>
+  </div>
+    </form>
+  </div>
 </body>
 </html>

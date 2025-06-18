@@ -21,4 +21,13 @@ router.put('/:id',private.checkJWT, service.update);
 // La route pour supprimer un catway
 router.delete('/:id',private.checkJWT, service.delete);
 
+
+/* Routes alternatives pour formulaire HTML (POST seulement) */
+
+// La route pour modifier un catway
+router.post('/:id/update',private.checkJWT, service.update);
+
+// La route pour supprimer un catway
+router.post('/:id/delete',private.checkJWT, service.delete);
+
 module.exports = router;

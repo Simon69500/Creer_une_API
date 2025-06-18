@@ -1,56 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/table.css" />
     <title>Tableau de bord</title>
-</head>
-<body>
-      <header>
-        <a href="/">Accueil</a>
-        <a href="/out">Documentation</a>
-        <button id="logoutBtn">Se déconnecter</button>
-      </header>
+  </head>
+  <body>
+    <header>
+      <a href="/">Retour</a>
+      <a href="/out">Documentation API</a>
+      <button id="logoutBtn">Se déconnecter</button>
+    </header>
 
     <main>
-        <h1>Bienvenue <%= user.name %></h1>
-      <p>Email : <%= user.email %></p>
-      <p>Date : <%= new Date().toLocaleDateString('fr-FR') %></p>
+      <h1>Tableau de bord</h1>
+      <div class="userDiv">
+        <h2>Bienvenue <%= user.name %></h2>
+        <p class="text">
+          <span class="textStrong">Email :</span> <%= user.email %>
+        </p>
+        <p class="text">
+          <span class="textStrong">Date :</span> <%= new
+          Date().toLocaleDateString('fr-FR') %>
+        </p>
+      </div>
 
-      <h2>Réservations en cours</h2>
+      <div class="tableDiv">
+        <h2>Réservations en cours</h2>
         <% if (reservations && reservations.length > 0) { %>
-          <table>
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Date</th>
-                <th>Durée</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% reservations.forEach(r => { %>
-                <tr>
-                  <td><%= r.userId ? r.userId.name : 'Nom inconnu' %></td>
-                  <td><%= new Date(r.startDate).toLocaleDateString('fr-FR') %></td>
-                  <td>
-                    <% 
-                      const start = new Date(r.startDate);
-                      const end = new Date(r.endDate);
-                      const diffTime = Math.abs(end - start);
-                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    %>
-                    <%= diffDays %> jours
-                  </td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Date</th>
+              <th>Durée</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% reservations.forEach(r => { %>
+            <tr>
+              <td><%= r.userId ? r.userId.name : 'Nom inconnu' %></td>
+              <td><%= new Date(r.startDate).toLocaleDateString('fr-FR') %></td>
+              <td>
+                <% const start = new Date(r.startDate); const end = new
+                Date(r.endDate); const diffTime = Math.abs(end - start); const
+                diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); %> <%=
+                diffDays %> jours
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
         <% } else { %>
-          <p>Aucune réservation en cours.</p>
+        <p>Aucune réservation en cours...</p>
         <% } %>
-
-
+      </div>
     </main>
     <script src="/javascripts/app.js"></script>
-</body>
+  </body>
 </html>

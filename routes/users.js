@@ -1,20 +1,20 @@
 /**
  * @module routes/users
  * @description Gère les routes liées aux utilisateurs : authentification, CRUD, et accès par email.
- * 
+ *
  * @requires express
  * @requires module:services/users
  * @requires module:middleware/private
- * 
+ *
  * Le service `users` contient probablement des opérations asynchrones sur un modèle Mongoose,
  * notamment pour l’authentification (`authenticate`), la récupération par email, ou les opérations CRUD.
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const service = require('../services/users');
-const privateRoute = require('../middleware/private');
+const service = require("../services/users");
+const privateRoute = require("../middleware/private");
 
 /**
  * @route POST /users/login
@@ -23,7 +23,7 @@ const privateRoute = require('../middleware/private');
  * @param {Object} body - Identifiants de connexion (email, mot de passe)
  * @returns {Object} Token JWT et informations utilisateur
  */
-router.post('/login', service.authenticate);
+router.post("/login", service.authenticate);
 
 /**
  * @route POST /users/logout
@@ -31,7 +31,7 @@ router.post('/login', service.authenticate);
  * @access Public
  * @returns {Object} Confirmation de déconnexion
  */
-router.post('/logout', service.logout);
+router.post("/logout", service.logout);
 
 /**
  * @route GET /users
@@ -39,7 +39,7 @@ router.post('/logout', service.logout);
  * @access Privé
  * @returns {Array<Object>} Liste des utilisateurs
  */
-router.get('/', privateRoute.checkJWT, service.getByAll);
+router.get("/", privateRoute.checkJWT, service.getByAll);
 
 /**
  * @route GET /users/:email
@@ -48,7 +48,7 @@ router.get('/', privateRoute.checkJWT, service.getByAll);
  * @param {string} email - Email de l'utilisateur
  * @returns {Object} Utilisateur correspondant
  */
-router.get('/:email', privateRoute.checkJWT, service.getByMail);
+router.get("/:email", privateRoute.checkJWT, service.getByMail);
 
 /**
  * @route POST /users
@@ -57,7 +57,7 @@ router.get('/:email', privateRoute.checkJWT, service.getByMail);
  * @param {Object} body - Données du nouvel utilisateur
  * @returns {Object} Utilisateur créé
  */
-router.post('/', service.add);
+router.post("/", service.add);
 
 /**
  * @route PUT /users/:email
@@ -67,7 +67,7 @@ router.post('/', service.add);
  * @param {Object} body - Données à mettre à jour
  * @returns {Object} Utilisateur modifié
  */
-router.put('/:email', privateRoute.checkJWT, service.update);
+router.put("/:email", privateRoute.checkJWT, service.update);
 
 /**
  * @route GET /users/:email/edit
@@ -76,7 +76,7 @@ router.put('/:email', privateRoute.checkJWT, service.update);
  * @param {string} email - Email de l'utilisateur
  * @returns {Object} Utilisateur à éditer
  */
-router.get('/:email/edit', privateRoute.checkJWT, service.getByMail);
+router.get("/:email/edit", privateRoute.checkJWT, service.getByMail);
 
 /**
  * @route DELETE /users/:email
@@ -85,6 +85,6 @@ router.get('/:email/edit', privateRoute.checkJWT, service.getByMail);
  * @param {string} email - Email de l'utilisateur à supprimer
  * @returns {Object} Confirmation de suppression
  */
-router.delete('/:email', privateRoute.checkJWT, service.delete);
+router.delete("/:email", privateRoute.checkJWT, service.delete);
 
 module.exports = router;

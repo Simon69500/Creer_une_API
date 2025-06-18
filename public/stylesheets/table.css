@@ -1,22 +1,23 @@
+/*CSS pour les tableaux */
 .tableDiv table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1em;
 }
 
-.tableDiv th, .tableDiv td {
+.tableDiv th,
+.tableDiv td {
   border: 1px solid #ccc;
   padding: 8px 12px;
-  text-align: left;
+  text-align: center;
 }
 
 .tableDiv th {
-  background-color: #453bd1;
+  background-color: #343435;
 }
 
 .tableDiv a {
-  color: #007bff;
-  text-decoration: none;
+  color: white;
 }
 
 .tableDiv a:hover {
@@ -41,4 +42,8 @@
   width: 100px;
   padding: 4px 6px;
   margin-right: 5px;
+}
+
+th {
+  color: aliceblue;
 }

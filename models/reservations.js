@@ -8,6 +8,11 @@ const Reservation = new Schema({
         required: [true, 'le numéro est requis'],
         min: [1, 'le numéro doit être au moins de 1']
     },
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     clientName: {
         type: String,
         trim: true,

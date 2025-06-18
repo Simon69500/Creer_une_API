@@ -2,32 +2,32 @@ var express = require('express');
 var router = express.Router();
 
 const service = require('../services/catways');
-const private = require('../middleware/private');
+const privateRoute = require('../middleware/private');
 
 /* GET users listing. */
 
 // La route pour lire les infos des catways
-router.get('/',private.checkJWT,  service.getByAll)
+router.get('/',privateRoute.checkJWT,  service.getByAll)
 
 // La route pour lire les infos d'un catway
-router.get('/:id',private.checkJWT,  service.getById);
+router.get('/:id',privateRoute.checkJWT,  service.getById);
 
 // La route pour ajouter un catway
-router.post('/',private.checkJWT, service.add);
+router.post('/',privateRoute.checkJWT, service.add);
 
 // La route pour modifier un catway
-router.put('/:id',private.checkJWT, service.update);
+router.put('/:id',privateRoute.checkJWT, service.update);
 
 // La route pour supprimer un catway
-router.delete('/:id',private.checkJWT, service.delete);
+router.delete('/:id',privateRoute.checkJWT, service.delete);
 
 
 /* Routes alternatives pour formulaire HTML (POST seulement) */
 
 // La route pour modifier un catway
-router.post('/:id/update',private.checkJWT, service.update);
+router.post('/:id/update',privateRoute.checkJWT, service.update);
 
 // La route pour supprimer un catway
-router.post('/:id/delete',private.checkJWT, service.delete);
+router.post('/:id/delete',privateRoute.checkJWT, service.delete);
 
 module.exports = router;

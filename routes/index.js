@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const private = require('../middleware/private');
+const privateRoute = require('../middleware/private');
 const User = require('../models/users');
 const Catway = require('../models/catway');
 const Reservation = require('../models/reservations');
@@ -12,13 +12,14 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.get('/dashboard', private.checkJWT, async (req, res) => {
+router.get('/dashboard', privateRoute.checkJWT, async (req, res) => {
   try {
     const user = await User.findOne({ email: req.email }).select('name email');
-    const reservations = await Reservation.find({ userEmail: req.email });
     if (!user) {
       return res.status(404).json('user_not_found');
     }
+
+    const reservations = await Reservation.find({ userId: user._id }).populate('userId', 'name');
     res.render('dashboard', { user, reservations });
   } catch (err) {
     console.error('Erreur dans /dashboard :', err);
@@ -27,7 +28,8 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
 });
 
 
-router.get('/reservations', private.checkJWT, async (req, res, next) => {
+
+router.get('/reservations', privateRoute.checkJWT, async (req, res, next) => {
   try {
     const reservations = await Reservation.find({});
     res.render('reservation', { reservations, catwayId: req.params.id || null });
@@ -37,7 +39,7 @@ router.get('/reservations', private.checkJWT, async (req, res, next) => {
 });
 
 
-router.get('/catways', private.checkJWT, async (req, res, next) => {
+router.get('/catways', privateRoute.checkJWT, async (req, res, next) => {
   try {
     const catways = await Catway.find({});
     res.render('catway', { catways });
@@ -46,7 +48,7 @@ router.get('/catways', private.checkJWT, async (req, res, next) => {
   }
 });
 
-router.get('/users', private.checkJWT, async (req, res) => {
+router.get('/users', privateRoute.checkJWT, async (req, res) => {
   try {
     const users = await User.find({});
     res.render('user', {users});

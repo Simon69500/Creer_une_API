@@ -2,6 +2,11 @@ const Reservation = require('../models/reservations');
 const User = require('../models/users');
 
 /**
+ * @module services/reservation
+ * @description Toutes les opérations de gestion des reservation.
+ */
+
+/**
  * Récupère toutes les réservations pour un catway donné.
  * @route GET /reservations/:id
  * @param {Object} req - Objet de requête Express.
@@ -17,6 +22,7 @@ exports.getByAll = async (req, res, next) => {
         return res.status(500).json(error);
     }
 };
+
 
 /**
  * Récupère une réservation spécifique.
@@ -44,6 +50,7 @@ exports.getById = async (req, res, next) => {
         return res.status(500).send("Erreur serveur : " + error.message);
     }
 };
+
 
 /**
  * Crée une nouvelle réservation.
@@ -77,6 +84,7 @@ exports.add = async (req, res, next) => {
         return res.status(500).json(error);
     }
 };
+
 
 /**
  * Met à jour une réservation existante.
@@ -116,6 +124,7 @@ exports.update = async (req, res, next) => {
         return res.status(500).json(error);
     }
 };
+
 
 /**
  * Supprime une réservation spécifique.

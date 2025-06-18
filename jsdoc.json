@@ -1,9 +1,15 @@
 {
-    "source": {
-        "include": ["./routes", "./models", "./services", "./middleware"],
-        "includePattern": ".js$"
-    },
-    "ops": {
-        "destination": "./out"
-    }
+  "source": {
+    "include": [
+      "./routes",
+      "./services",
+      "./models",
+      "./middleware"
+    ],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules|views)"
+  },
+  "opts": {
+    "destination": "./out"
+  }
 }

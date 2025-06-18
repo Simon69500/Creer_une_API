@@ -1,6 +1,16 @@
 const Catway = require('../models/catway');
+/**
+ * @module services/catways
+ * @description Toutes les opérations de gestion des catways.
+ */
 
-// Récupérer tous les Catways
+/**
+ * Récupère tous les catways.
+ * @route GET /catways
+ * @param {Object} req - Objet de requête Express.
+ * @param {Object} res - Objet de réponse Express.
+ * @param {Function} next - Fonction middleware suivante.
+ */
 exports.getByAll = async (req, res, next) => {
     try {
         const catways = await Catway.find({});
@@ -10,7 +20,13 @@ exports.getByAll = async (req, res, next) => {
     }
 };
 
-// Récupérer un seul Catway par numéro 
+/**
+ * Récupère un catway par son numéro.
+ * @route GET /catways/:id
+ * @param {Object} req - Objet de requête contenant l'ID.
+ * @param {Object} res - Objet de réponse Express.
+ * @param {Function} next - Fonction middleware suivante.
+ */
 exports.getById = async (req, res, next) => {
     const id = req.params.id;
 
@@ -27,7 +43,13 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-// Ajouter un Catway
+/**
+ * Ajoute un nouveau catway.
+ * @route POST /catways
+ * @param {Object} req - Objet de requête contenant catwayNumber, catwayType, catwayState.
+ * @param {Object} res - Objet de réponse Express.
+ * @param {Function} next - Fonction middleware suivante.
+ */
 exports.add = async (req, res, next) => {
     const { catwayNumber, catwayType, catwayState } = req.body;
 
@@ -45,7 +67,13 @@ exports.add = async (req, res, next) => {
     }
 };
 
-// Modifier un Catway (uniquement état ici)
+/**
+ * Met à jour l'état d’un catway.
+ * @route PUT /catways/:id
+ * @param {Object} req - Objet de requête avec le nouvel état.
+ * @param {Object} res - Objet de réponse Express.
+ * @param {Function} next - Fonction middleware suivante.
+ */
 exports.update = async (req, res, next) => {
     const id = req.params.id;
     const { catwayState } = req.body;
@@ -65,7 +93,13 @@ exports.update = async (req, res, next) => {
     }
 };
 
-// Supprimer un Catway
+/**
+ * Supprime un catway.
+ * @route DELETE /catways/:id
+ * @param {Object} req - Objet de requête contenant l’ID du catway.
+ * @param {Object} res - Objet de réponse Express.
+ * @param {Function} next - Fonction middleware suivante.
+ */
 exports.delete = async (req, res, next) => {
     const id = req.params.id;
 

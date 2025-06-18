@@ -1,33 +1,91 @@
-var express = require('express');
-var router = express.Router();
+/**
+ * @module routes/reservations
+ * @description Gère les routes liées aux réservations de catways.
+ * 
+ * @requires express
+ * @requires module:services/reservations
+ * @requires module:middleware/private
+ * 
+ * Les fonctions du service `reservations` effectuent probablement des opérations
+ * Mongoose asynchrones (find, create, update, delete) pour gérer les documents
+ * liés aux réservations.
+ */
+
+const express = require('express');
+const router = express.Router();
 
 const service = require('../services/reservations');
 const privateRoute = require('../middleware/private');
 
-
-/* GET users listing. */
-// La route pour lire toutes les réservations d’un catway
+/**
+ * @route GET /catways/:id/reservations
+ * @desc Récupère toutes les réservations d’un catway donné
+ * @access Privé
+ * @param {string} id - Identifiant du catway
+ * @returns {Array<Object>} Liste des réservations
+ */
 router.get('/catways/:id/reservations', privateRoute.checkJWT, service.getByAll);
 
-// La route pour lire une réservation précise
+/**
+ * @route GET /catways/:id/reservations/:idReservation
+ * @desc Récupère une réservation précise d’un catway
+ * @access Privé
+ * @param {string} id - Identifiant du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ * @returns {Object} Réservation trouvée
+ */
 router.get('/catways/:id/reservations/:idReservation', privateRoute.checkJWT, service.getById);
 
-// La route pour ajouter une réservation
+/**
+ * @route POST /catways/:id/reservations
+ * @desc Ajoute une réservation pour un catway donné
+ * @access Privé
+ * @param {string} id - Identifiant du catway
+ * @param {Object} body - Données de la réservation à créer
+ * @returns {Object} Réservation créée
+ */
 router.post('/catways/:id/reservations', privateRoute.checkJWT, service.add);
 
-// La route pour modifier une réservation
+/**
+ * @route PUT /catways/:id/reservations/:idReservation
+ * @desc Modifie une réservation précise d’un catway
+ * @access Privé
+ * @param {string} id - Identifiant du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ * @param {Object} body - Données mises à jour
+ * @returns {Object} Réservation modifiée
+ */
 router.put('/catways/:id/reservations/:idReservation', privateRoute.checkJWT, service.update);
 
-// La route pour supprimer une réservation
+/**
+ * @route DELETE /catways/:id/reservations/:idReservation
+ * @desc Supprime une réservation précise d’un catway
+ * @access Privé
+ * @param {string} id - Identifiant du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ * @returns {Object} Confirmation de suppression
+ */
 router.delete('/catways/:id/reservations/:idReservation', privateRoute.checkJWT, service.delete);
 
+/* Routes HTML (formulaires POST) */
 
+/**
+ * @route POST /:id/reservations/update
+ * @desc Modifie une réservation (via formulaire HTML)
+ * @access Privé
+ * @param {string} id - Identifiant de la réservation
+ * @param {Object} body - Données mises à jour
+ * @returns {Object} Réservation modifiée
+ */
+router.post('/:id/reservations/update', privateRoute.checkJWT, service.update);
 
-/* Routes alternatives pour formulaire HTML (POST seulement) */
-// La route pour modifier un catway
-router.post('/:id/reservations/update',privateRoute.checkJWT, service.update);
-
-// La route pour supprimer un catway
-router.post('/:id/reservations/delete',privateRoute.checkJWT, service.delete);
+/**
+ * @route POST /:id/reservations/delete
+ * @desc Supprime une réservation (via formulaire HTML)
+ * @access Privé
+ * @param {string} id - Identifiant de la réservation
+ * @returns {Object} Confirmation de suppression
+ */
+router.post('/:id/reservations/delete', privateRoute.checkJWT, service.delete);
 
 module.exports = router;

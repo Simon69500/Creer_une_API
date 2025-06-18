@@ -5,9 +5,17 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 /**
+ * @module services/users
+ * @description Toutes les opérations de gestion des utilisateurs.
+ */
+
+/**
  * Récupérer tous les utilisateurs.
  * @route GET /users
- * @returns {View} - Rend la vue 'users' avec la liste des utilisateurs.
+ * @param {Object} req - Objet requête Express.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.getByAll = async (req, res, next) => {
   try {
@@ -21,8 +29,11 @@ exports.getByAll = async (req, res, next) => {
 /**
  * Récupérer un utilisateur par email.
  * @route GET /users/:email
- * @param {string} req.params.email - Email de l'utilisateur
- * @returns {View|Error} - Rend la vue 'user-edit' si trouvé, sinon erreur 404.
+ * @param {Object} req - Objet requête Express.
+ * @param {string} req.params.email - Email de l'utilisateur.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.getByMail = async (req, res, next) => {
   const email = req.params.email;
@@ -40,10 +51,13 @@ exports.getByMail = async (req, res, next) => {
 /**
  * Ajouter un nouvel utilisateur.
  * @route POST /users
- * @body {string} name - Nom
- * @body {string} email - Email
- * @body {string} password - Mot de passe
- * @returns {Redirect|Error}
+ * @param {Object} req - Objet requête Express.
+ * @param {string} req.body.name - Nom.
+ * @param {string} req.body.email - Email.
+ * @param {string} req.body.password - Mot de passe.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.add = async (req, res, next) => {
   try {
@@ -64,11 +78,14 @@ exports.add = async (req, res, next) => {
 /**
  * Mettre à jour un utilisateur.
  * @route PUT /users
- * @body {string} oldEmail - Ancien email
- * @body {string} name - Nouveau nom
- * @body {string} email - Nouvel email
- * @body {string} password - Nouveau mot de passe (optionnel)
- * @returns {Redirect|Error}
+ * @param {Object} req - Objet requête Express.
+ * @param {string} req.body.oldEmail - Ancien email.
+ * @param {string} req.body.name - Nouveau nom.
+ * @param {string} req.body.email - Nouvel email.
+ * @param {string} [req.body.password] - Nouveau mot de passe (optionnel).
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.update = async (req, res, next) => {
   const oldEmail = req.body.oldEmail;
@@ -103,8 +120,11 @@ exports.update = async (req, res, next) => {
 /**
  * Supprimer un utilisateur par email.
  * @route DELETE /users/:email
- * @param {string} req.params.email - Email de l'utilisateur
- * @returns {Redirect|Error}
+ * @param {Object} req - Objet requête Express.
+ * @param {string} req.params.email - Email de l'utilisateur.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.delete = async (req, res, next) => {
   const email = req.params.email;
@@ -123,9 +143,12 @@ exports.delete = async (req, res, next) => {
 /**
  * Authentifier un utilisateur et générer un token JWT.
  * @route POST /login
- * @body {string} email
- * @body {string} password
- * @returns {Redirect|Error}
+ * @param {Object} req - Objet requête Express.
+ * @param {string} req.body.email - Email.
+ * @param {string} req.body.password - Mot de passe.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.authenticate = async (req, res, next) => {
   const { email, password } = req.body;
@@ -162,7 +185,10 @@ exports.authenticate = async (req, res, next) => {
 /**
  * Déconnexion de l'utilisateur.
  * @route GET /logout
- * @returns {JSON} - Message de confirmation.
+ * @param {Object} req - Objet requête Express.
+ * @param {Object} res - Objet réponse Express.
+ * @param {Function} next - Middleware suivant.
+ * @returns {void}
  */
 exports.logout = async (req, res, next) => {
   res.clearCookie('access_token', {

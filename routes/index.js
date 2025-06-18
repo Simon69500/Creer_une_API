@@ -12,9 +12,20 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.get('/dashboard', private.checkJWT, (req, res) => {
-  res.render('dashboard');
+router.get('/dashboard', private.checkJWT, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.email }).select('name email');
+    const reservations = await Reservation.find({ userEmail: req.email });
+    if (!user) {
+      return res.status(404).json('user_not_found');
+    }
+    res.render('dashboard', { user, reservations });
+  } catch (err) {
+    console.error('Erreur dans /dashboard :', err);
+    res.status(500).json({ error: "internal_server_error" });
+  }
 });
+
 
 router.get('/reservations', private.checkJWT, async (req, res, next) => {
   try {
@@ -35,31 +46,12 @@ router.get('/catways', private.checkJWT, async (req, res, next) => {
   }
 });
 
-router.get('/user', private.checkJWT, (req, res) => {
-  res.render('user');
-});
-
-
-/* --- ROUTE API --- */
-
-router.get('/me', private.checkJWT, async (req, res) => {
+router.get('/users', private.checkJWT, async (req, res) => {
   try {
-    console.log("Email récupéré du token :", req.email);
-
-    if (!req.email) {
-      return res.status(400).json({ error: 'Email manquant dans la requête' });
-    }
-
-    const user = await User.findOne({ email: req.email }).select('name email');
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json(user);
-  } catch (err) {
-    console.error('Erreur dans /me :', err);
-    res.status(500).json({ error: err.message });
+    const users = await User.find({});
+    res.render('user', {users});
+  } catch (error) {
+    next(error);
   }
 });
 

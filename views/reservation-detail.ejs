@@ -2,15 +2,18 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Détail du Catway</title>
+  <title>Détail de la Réservation</title>
 </head>
 <body>
-<h1>Détail de la réservation n°<%= reservation.catwayNumber %></h1>
-    <p>Nom du client : <%= reservation.clientName %></p>
-    <p>Nom du bateau : <%= reservation.boatName %></p>
-    <p>Date début : <%= reservation.startDateFormatted %></p>
-    <p>Date fin : <%= reservation.endDateFormatted %></p>
+  <h1>Détail de la réservation pour le Catway n°<%= reservation.catwayNumber %></h1>
 
-    <a href="/reservations">Retour à la liste</a>
+  <p><strong>Nom du client :</strong> <%= reservation.clientName %></p>
+  <p><strong>Email du client :</strong> <%= reservation.clientEmail || 'Non renseigné' %></p>
+  <p><strong>Nom du bateau :</strong> <%= reservation.boatName %></p>
+  <p><strong>Date de début :</strong> <%= reservation.startDateFormatted %></p>
+  <p><strong>Date de fin :</strong> <%= reservation.endDateFormatted %></p>
+
+  <a href="/reservations">Retour aux réservations</a>
+
 </body>
 </html>

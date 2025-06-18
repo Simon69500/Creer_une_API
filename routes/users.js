@@ -23,6 +23,7 @@ router.post('/', service.add);
 
 // La route pour modifier un utilisateur
 router.put('/:email', private.checkJWT, service.update);
+router.get('/:email/edit', private.checkJWT, service.getByMail);
 
 // La route pour supprimer un utilisateur
 router.delete('/:email', private.checkJWT, service.delete);

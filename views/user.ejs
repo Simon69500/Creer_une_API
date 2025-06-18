@@ -1,40 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <title>API - Utilisateurs</title>
+  <link rel="stylesheet" href="/stylesheets/table.css">
+  <title>Liste des Utilisateurs</title>
 </head>
 <body>
-      <header>
-    <a href="/">Accueil</a>
-    <a href="/dashboard">Tableau de Bord</a>
-    <a href="/docs">Documentation</a>
-    <button id="logoutBtn">Se déconnecter</button>
-  </header>
-    <main>
-      <h1>Utilisateurs Page</h1>
-        <h2> Catway n° <span id="catwayIdInput"></span></h2>
-        <button id="loadCatwayBtn">Charger les Catways</button>
-        <ul id="catwaysList"></ul>
 
-        <h3>Créer / Modifier un catways</h3>
-        <form id="catwayForm">
-          <input type="hidden" id="catwayIdInput" />
+<div class="tableDiv">
+  <h2>Liste des utilisateurs</h2>
 
-          <label for="catwayNumber">Numéro catway</label>
-          <input type="number" id="catwayNumber" required />
+  <% if (users && users.length > 0) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.password %></td>
+        <td>
+          <a href="/users/<%= encodeURIComponent(user.email) %>/edit">Modifier</a>
+          <form method="POST" action="/users/<%= user.email %>?_method=DELETE" style="display:inline;">
+            <button type="submit" onclick="return confirm('Confirmer la suppression ?')">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p>Aucun utilisateur trouvée.</p>
+  <% } %>
+</div>
 
-          <label for="catwayType">Type catway</label>
-          <input type="text" id="catwayType" placeholder="Type catway" required />
+<div class="formDiv">
+  <h2>Ajouter un nouveau Utilisateur</h2>
+  <form method="POST" action="/users">
 
-          <label for="catwayState">État catway</label>
-          <input type="text" id="catwayState" placeholder="État (…)" required />
+    <label for="name">Nom :</label>
+    <input type="text" id="name" name="name" required><br>
 
-          <button type="submit">Enregistrer</button>
-        </form>
+    <label for="email">Email :</label>
+    <input type="text" id="email" name="email" required><br>
 
-    </main>
-    <script src="/javascripts/users.js"></script>
+    <label for="password">Password :</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
+
 </body>
 </html>

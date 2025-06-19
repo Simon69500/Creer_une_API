@@ -43,6 +43,7 @@ exports.checkJWT = async (req, res, next) => {
     res.cookie("access_token", newToken, {
       httpOnly: true,
       sameSite: "Strict",
+      secure: true,
       maxAge: expiresIn * 1000,
     });
 

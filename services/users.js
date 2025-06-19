@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const SECRET_KEY = process.env.SECRET_KEY;
+const isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * @module services/users
@@ -173,8 +174,8 @@ exports.authenticate = async (req, res, next) => {
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      sameSite: "Strict",
-      secure: true,
+      sameSite: isProduction ? "Strict" : "Lax",
+      secure: isProduction,
       maxAge: expiresIn * 1000,
     });
 
